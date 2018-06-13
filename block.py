@@ -1,16 +1,34 @@
+import datetime
+
 class Block:
     def __init__(self, prev_hash, transactions):
         self.prev_hash    = prev_hash
         self.transactions = transactions
         self.hash         = hash(str([prev_hash, transactions]))
+        self.timestamp    = datetime.datetime.now()
 
 
+class Transaction_Input:
+    def __init__(self, prev_transaction, index, script_sig):
+        self.prev_transaction = prev_transaction #hash of previous transaction
+        self.index            = index            #index of output in the previous transaction
+        self.script_sig       = script_sig
+
+class Transaction_Output:
+    def __init__(self, value, script_public_key):
+        self.value             = value
+        self.script_public_key = script_public_key
+
+class Script:
+    def __init__(self, signature, public_key):
+        self.signature  = signature
+        self.public_key = public_key
 
 class Transaction:
-    def __init__(self, sender, recipient, amount):
-        self.sender    = sender
-        self.recipient = recipient
-        self.amount    = amount
+    def __init__(self, trans_input, trans_output, amount):
+        self.input  = trans_input
+        self.output = trans_output
+        self.amount = amount
 
 
 
