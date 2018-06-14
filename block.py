@@ -1,12 +1,16 @@
-import datetime
+import datetime as dt
+from Crypto import Random
+from Crypto.PublicKey import RSA
+
 
 class Block:
     def __init__(self, prev_hash, transactions):
         self.prev_hash    = prev_hash
-        self.transactions = transactions
+        self.transactions = transactions #really this is a merkle root of the transactions
         self.hash         = hash(str([prev_hash, transactions]))
-        self.timestamp    = datetime.datetime.now()
-
+        self.timestamp    = dt.datetime.now()
+        self.target       = 3 #number of leading zeros in winning hash
+        self.nonce        = 0
 
 class Transaction_Input:
     def __init__(self, prev_transaction, index, script_sig):
@@ -25,12 +29,18 @@ class Script:
         self.public_key = public_key
 
 class Transaction:
-    def __init__(self, trans_input, trans_output, amount):
-        self.input  = trans_input
-        self.output = trans_output
-        self.amount = amount
+    def __init__(self, trans_inputs, trans_outputs):
+        self.inputs  = trans_inputs #list of inputs
+        self.outputs = trans_outputs#list of outputs
 
+class Wallet:
+    def __init__(self):
+	   self.privatekey = RSA.generate(1024, Random.new().read)
+	   self.publickey  = privatekey.publickey()
 
+class Miner:
+    def __init__(self):
+        self.transactions = global_transactions
 
 
 if __name__ == '__main__':
