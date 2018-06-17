@@ -9,35 +9,7 @@ class People:
         self.people = {}
 
     def add_person(self, person_instance):
-        hash_of_address = hash(person_instance.address)
-        if hash_of_address in self.people:
-            current_person = self.people[hash_of_address]
-            while(current_person.next != None):
-                print('found collision! traversing...')
-                current_person = current_person.next
-            current_person.next = person_instance
-        else:
-            self.people[hash_of_address] = person_instance
-
-    def lookup(self, address, name):
-        address_hash = hash(address)
-        if address_hash not in self.people:
-            print('unknown address! ' + name + ' is not a known person.')
-        else:
-            bucket = self.people[address_hash]
-            if bucket.name == name:
-                return bucket
-            else:
-                print('found collision, traversing...')
-                done = False
-                while bucket.next != None and done == False:
-                    bucket = bucket.next
-                    if bucket.name == name:
-                        done = True
-                    if bucket.next == None and bucket.name != name:
-                        print('could not find person.')
-                        bucket = None
-                return bucket
+        self.people[person_instance.name] = person_instance
 
 class Block:
     def __init__(self, prev_hash, transaction_list):
@@ -97,11 +69,11 @@ class Transaction:
 
 
 class Trade:
-    def __init__(self, sender_address, sender_name, receiver_address, receiver_name, amount):
-        self.sender_address   = sender_address
-        self.sender_name      = sender_name
-        self.receiver_address = receiver_address
-        self.receiver_name    = receiver_name
+    def __init__(self,  sender_instance,  receiver_instance, amount):
+        self.sender_address   = sender_instance.address
+        self.sender_name      = sender_instance.name
+        self.receiver_address = receiver_instance.address
+        self.receiver_name    = receiver_instance.name
         self.amount           = amount
 
 class Person:
@@ -111,8 +83,10 @@ class Person:
         self.address        = address
         self.next           = None #for linked list collisions in People hashtable
 
-    def request_trade(self, exchange, recipient_address, amount):
-        exchange.receive_request(trade(self.address, self.name, recipient_address, recipient_name,  amount))
+    def request_trade(self, exchange, recipient, amount):
+        exchange.receive_request(Trade(self,
+                                       recipient,
+                                       amount))
 
     def receive_trade(self, amount):
         self.coin_possessed += amount
