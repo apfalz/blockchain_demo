@@ -1,4 +1,6 @@
 import datetime as dt
+import time
+import numpy as np
 from Crypto import Random
 from Crypto.PublicKey import RSA
 
@@ -38,13 +40,41 @@ class People:
                 return bucket
 
 class Block:
-    def __init__(self, prev_hash, transactions):
+    def __init__(self, prev_hash, transaction_list):
         self.prev_hash    = prev_hash
-        self.transactions = transactions #really this is a merkle root of the transactions
-        self.hash         = hash(str([prev_hash, transactions]))
-        self.timestamp    = dt.datetime.now()
-        self.target       = 3 #number of leading zeros in winning hash
+        self.transactions = str(transaction_list) #really this is a merkle root of the transactions
         self.nonce        = 0
+        self.timestamp    = dt.datetime.now()
+        self.target       = 3241 #number of leading zeros in winning hash
+        self.verbose      = 2 #2: print everything, 1: print normally, 0: print nothing
+        self.print_freq   = 100
+        self.hash         = self.create_hash()
+
+
+    def create_hash(self):
+        prev     = sum([ord(i) for i in self.prev_hash])
+        trans    = sum([ord(i) for i in self.transactions])
+        cur_hash = (prev + trans) - self.nonce
+        return cur_hash
+
+    def solve_puzzle(self):
+        '''for the time being just pretend to solve a problem'''
+        print('beginning to generate new block...')
+        time.sleep(np.random.randint(10))
+        print('created new block!')
+        return hash(str(self.prev_hash) + str(self.transactions) + str(self.nonce))
+
+
+    def future_solve_puzzle(self):
+        cur_hash = self.create_hash()
+        while cur_hash >= self.target:
+            self.nonce += 1
+            cur_hash    = self.create_hash()
+            if self.verbose >= 2:
+                if num_attempts % self.print_freq == 0:
+                    print(str(num_attempts) + ' attempts so far.')#, end='')
+        return cur_hash
+
 
 
 
@@ -105,6 +135,7 @@ class Miner:
 
 
 if __name__ == '__main__':
-    first_transaction = Transaction('Satoshi', 'Andrew', '2')
     first_hash        = hash('arbitrary string serving as has for genesis block')
-    genesis_block     = Block(first_hash, first_transaction)
+    genesis_block     = Block(str(first_hash), 'first_transaction')
+
+    genesis_block.solve_puzzle()
