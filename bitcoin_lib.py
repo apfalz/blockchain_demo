@@ -110,12 +110,16 @@ class Exchange:
 class Miner:
     def __init__(self):
         self.num_blocks_mined = 0
-        self.minded_blocks    = []
+        self.mined_blocks     = []
+        self.start_mining()
+
+    def start_mining(self):
         with open('transactions.txt', 'r') as f:
             self.transactions_list = f.readlines()
 
+
     def find_block(self):
-        new_block = Block(str(hash('sdf')), str(self.transactions_list))
+        new_block = Block(str(hash('genesis_block')), str(self.transactions_list))
 
 
 if __name__ == '__main__':
