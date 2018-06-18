@@ -68,7 +68,6 @@ class Transaction:
             print('Dectected fraudulent transaction attempt!')
             return False
 
-
 class Trade:
     def __init__(self,  sender_instance,  receiver_instance, amount):
         self.sender   = sender_instance
@@ -92,7 +91,6 @@ class Person:
     def receive_trade(self, amount):
         self.coin_possessed += amount
 
-
 class Exchange:
     def __init__(self, name):
         self.name     = name
@@ -111,10 +109,13 @@ class Exchange:
 
 class Miner:
     def __init__(self):
+        self.num_blocks_mined = 0
+        self.minded_blocks    = []
         with open('transactions.txt', 'r') as f:
             self.transactions_list = f.readlines()
 
-        print(self.transactions_list[0].split())
+    def find_block(self):
+        new_block = Block(str(hash('sdf')), str(self.transactions_list))
 
 
 if __name__ == '__main__':
