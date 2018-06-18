@@ -21,6 +21,7 @@ class Block:
         self.verbose      = 2 #2: print everything, 1: print normally, 0: print nothing
         self.print_freq   = 100
         self.hash         = self.create_hash()
+        self.solve_puzzle()
 
 
     def create_hash(self):
@@ -70,11 +71,9 @@ class Transaction:
 
 class Trade:
     def __init__(self,  sender_instance,  receiver_instance, amount):
-        self.sender_address   = sender_instance.address
-        self.sender_name      = sender_instance.name
-        self.receiver_address = receiver_instance.address
-        self.receiver_name    = receiver_instance.name
-        self.amount           = amount
+        self.sender   = sender_instance
+        self.receiver = receiver_instance
+        self.amount   = amount
 
 class Person:
     def __init__(self, coin_possessed, address, name):
@@ -84,9 +83,11 @@ class Person:
         self.next           = None #for linked list collisions in People hashtable
 
     def request_trade(self, exchange, recipient, amount):
-        exchange.receive_request(Trade(self,
-                                       recipient,
-                                       amount))
+        self.coin_possessed -= amount
+        result               = exchange.receive_request(Trade(self,
+                                                              recipient,
+                                                              amount))
+        return result
 
     def receive_trade(self, amount):
         self.coin_possessed += amount
@@ -98,14 +99,22 @@ class Exchange:
         self.requests = []
 
     def receive_request(self, trade_instance):
-        self.requests.append(trade_instance)
+        if trade_instance.amount <= trade_instance.sender.coin_possessed:
+            self.requests.append(trade_instance)
+            return True
+        else:
+            print('Detected fraudulent transaction!')
+            return False
 
     def broadcast_requests(self):
         return
 
 class Miner:
     def __init__(self):
-        self.transactions = global_transactions
+        with open('transactions.txt', 'r') as f:
+            self.transactions_list = f.readlines()
+
+        print(self.transactions_list[0].split())
 
 
 if __name__ == '__main__':
