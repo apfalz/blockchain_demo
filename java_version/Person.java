@@ -1,5 +1,10 @@
 package blockchain_demo;
+
 public class Person{
+
+    public String name;
+    public int    coin_possessed;
+    public int    address;
 
     public Person(int coin_possessed, int address, String name){
         this.name           = name;

@@ -168,7 +168,6 @@ class Miner:
         self.pending_trades   = None
         self.newest_block     = self.network.newest_block
         self.interrupt        = False
-        self.newest_block     = network.newest_block
         self.verbose          = 2
         self.mining_thread    = threading.Thread(target=self.start_mining)
         self.mining_thread.start()
@@ -177,7 +176,6 @@ class Miner:
     def start_mining(self):
         #first get transactions from the network
         self.pending_trades = self.network.requested_transactions
-        last_block          = self.network.newest_block
         value               = 0
         target              = 10
         if self.verbose >= 2:
@@ -191,7 +189,7 @@ class Miner:
         #if you found a new block, broadcast it and start working on next block
         if value == target:
             print(self.name + ': I found a new block! Letting network know about it.')
-            new_block = Block(hash(str(last_block)), self.pending_trades)
+            new_block = Block(hash(str(self.newest_block)), self.pending_trades)
             self.broadcast_new_block(new_block)
             self.start_mining()
 
