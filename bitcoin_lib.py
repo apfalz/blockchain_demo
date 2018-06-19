@@ -16,6 +16,9 @@ class People:
         for i, name in enumerate(self.names):
             self.add_person(Person(np.random.randint(1, 20), i, name))
 
+        self.transaction_thread = threading.Thread(target=self.start_generating_transactions)
+        self.transaction_thread.start()
+
     def add_person(self, person_instance):
         self.people[person_instance.name] = person_instance
 
@@ -167,6 +170,8 @@ class Miner:
         self.interrupt        = False
         self.newest_block     = network.newest_block
         self.verbose          = 2
+        self.mining_thread    = threading.Thread(target=self.start_mining)
+        self.mining_thread.start()
 
 
     def start_mining(self):
@@ -228,10 +233,7 @@ if __name__ == '__main__':
     print('creating people')
     people               = People(demo_exchange)
     people.verbose       = 1
-    transactions_thread  = threading.Thread(target=people.start_generating_transactions)
-    transactions_thread.start()
 
-    print('creating miner')
+    print('creating miners')
     miner_0              = Miner('miner_0', network)
-    mining_thread        = threading.Thread(target=miner_0.start_mining())
-    mining_thread.start()
+    miner_1              = Miner('miner_1', network)
