@@ -22,6 +22,8 @@ public class Miner{
         this.network.establish_connection(this);
 
         this.newest_block     = this.network.newest_block;
+        this.interrupt        = false;
+        this.rand             = new Random();
 
     }
 
@@ -34,13 +36,14 @@ public class Miner{
         }
 
         //keep working until you receive interrupt or until you find a new block.
-        while (this.interrupt == false && value != target){
+        while ((this.interrupt == false )&& (value != target)){
             try{
-                Thread.sleep(rand.nextInt(10) * 1000);
+                int wait_for = this.rand.nextInt(10) * 1000;
+                Thread.sleep(wait_for);
                 value += 1;
             }
             catch(InterruptedException ex){
-                Thread.currentThread().interrupt();
+                System.out.println("exception");
             }
         }
 

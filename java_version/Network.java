@@ -10,7 +10,8 @@ public class Network{
     public ArrayList<Trade>  requested_transactions;
 
     public Network(){
-
+        this.connected_miners       = new ArrayList<Miner>();
+        this.requested_transactions = new ArrayList<Trade>();
         this.verbose                = 2;
         this.num_miners             = 0;
 
