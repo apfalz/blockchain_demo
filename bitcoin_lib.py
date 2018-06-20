@@ -44,38 +44,39 @@ class Block:
         self.timestamp    = dt.datetime.now()
         self.target       = 10 #for now this is the delay to wait before successfully creating block
         self.verbose      = 2 #2: print everything, 1: print normally, 0: print nothing
-        self.print_freq   = 100
-        self.hash         = self.create_hash()
+
+
         #self.solve_puzzle()
 
-
-    def create_hash(self):
-        prev     = sum([ord(i) for i in str(self.prev_hash)])
-        trans    = sum([ord(i) for i in str(self.transactions)])
-        cur_hash = (prev + trans) - self.nonce
-        return cur_hash
-
-    def solve_puzzle(self):
-        '''for the time being just pretend to solve a problem'''
-        print('beginning to generate new block...')
-        value        = 0
-        while value != self.target and self.interrupt == False:
-            time.sleep(np.random.randint(10))
-            value += 1
-        print('created new block!')
-
-        return hash(str(self.prev_hash) + str(self.transactions) + str(self.nonce))
-
-
-    def future_solve_puzzle(self):
-        cur_hash = self.create_hash()
-        while cur_hash >= self.target:
-            self.nonce += 1
-            cur_hash    = self.create_hash()
-            if self.verbose >= 2:
-                if num_attempts % self.print_freq == 0:
-                    print(str(num_attempts) + ' attempts so far.')#, end='')
-        return cur_hash
+    #
+    # def create_hash(self):
+    #     prev     = sum([ord(i) for i in str(self.prev_hash)])
+    #     trans    = sum([ord(i) for i in str(self.transactions)])
+    #     cur_hash = (prev + trans) - self.nonce
+    #     return cur_hash
+    #
+    # def solve_puzzle(self):
+    #     '''for the time being just pretend to solve a problem'''
+    #     if self.verbose >= 2:
+    #         print('beginning to generate new block...')
+    #     value        = 0
+    #     while value != self.target and self.interrupt == False:
+    #         time.sleep(np.random.randint(10))
+    #         value += 1
+    #     print('created new block!')
+    #
+    #     return hash(str(self.prev_hash) + str(self.transactions) + str(self.nonce))
+    #
+    #
+    # def future_solve_puzzle(self):
+    #     cur_hash = self.create_hash()
+    #     while cur_hash >= self.target:
+    #         self.nonce += 1
+    #         cur_hash    = self.create_hash()
+    #         if self.verbose >= 2:
+    #             if num_attempts % self.print_freq == 0:
+    #                 print(str(num_attempts) + ' attempts so far.')#, end='')
+    #     return cur_hash
 
 
 class Network:
@@ -99,24 +100,24 @@ class Network:
                 miner.receive_new_block(self)
 
 
-
-class Transaction:
-    def __init__(self, transactions):
-        self.transactions  = transactions
-        self.verbose       = 2
-
-    def receive_request(self, trade):
-        self.transactions.append(trade)
-
-    def verify_request(self, trade_instance):
-        sender   = People.lookup(trade_instance.sender_address,   trade_instance.sender_name)
-        receiver = People.lookup(trade_instance.receiver_address, trade_instance.receiver_name)
-
-        if sender and receiver and sender.coin_possessed >= trade_instance.amount:
-            return True
-        else:
-            print('Dectected fraudulent transaction attempt!')
-            return False
+#
+# class Transaction:
+#     def __init__(self, transactions):
+#         self.transactions  = transactions
+#         self.verbose       = 2
+#
+#     def receive_request(self, trade):
+#         self.transactions.append(trade)
+#
+#     def verify_request(self, trade_instance):
+#         sender   = People.lookup(trade_instance.sender_address,   trade_instance.sender_name)
+#         receiver = People.lookup(trade_instance.receiver_address, trade_instance.receiver_name)
+#
+#         if sender and receiver and sender.coin_possessed >= trade_instance.amount:
+#             return True
+#         else:
+#             print('Dectected fraudulent transaction attempt!')
+#             return False
 
 class Trade:
     def __init__(self,  sender_instance,  receiver_instance, amount):

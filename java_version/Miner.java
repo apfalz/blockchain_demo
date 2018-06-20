@@ -11,7 +11,7 @@ public class Miner{
     public Boolean interrupt;
     public int     verbose;
     private Random rand;
-    public ArrayList<Object> pending_trades = new ArrayList<Object>();
+    public ArrayList<Trade> pending_trades = new ArrayList<Trade>();
     //mining thread;
 
     public Miner(String name, Network network_connection){
