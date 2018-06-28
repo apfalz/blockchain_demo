@@ -9,9 +9,11 @@ public class Network{
     public ArrayList<Block>  list_of_mined_blocks;
     public ArrayList<Trade>  requested_transactions;
 
-    public Network(){
+    public Network(Block genesis_block){
+        this.newest_block           = genesis_block;
         this.connected_miners       = new ArrayList<Miner>();
         this.requested_transactions = new ArrayList<Trade>();
+        this.list_of_mined_blocks   = new ArrayList<Block>();
         this.verbose                = 2;
         this.num_miners             = 0;
 

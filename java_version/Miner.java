@@ -22,6 +22,7 @@ public class Miner{
         this.network.establish_connection(this);
 
         this.newest_block     = this.network.newest_block;
+        System.out.println("newest block: ");// + this.newest_block);
         this.interrupt        = false;
         this.rand             = new Random();
 
